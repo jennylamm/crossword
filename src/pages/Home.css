@@ -1,18 +1,19 @@
-.App {
+.Home {
     text-align: center;
+    background-image: url("../assests/images/HomeImage.png");
+    background-color: #78CAE6;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
   
-  .App-logo {
+  .Home-logo {
     height: 90vmin;
     pointer-events: none;
   }
   
   
-  .App-header {
-    background-image: url("../assests/images/HomeImage.png");
-    background-color: #78CAE6;
-    background-repeat: no-repeat;
-    background-size: cover;
+  .Home-header {
+    
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -22,9 +23,14 @@
     color: white;
   }
   
-  .App-link {
+  .Home-link {
     color: #61dafb;
   }
+
+  .play-button {
+    position: absolute;
+    bottom: 50px;  }
+
   
   
   

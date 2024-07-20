@@ -1,0 +1,20 @@
+.generate-container {
+  background-image: url("../assests/images/GenerateImage.PNG");
+  background-size: cover;
+  background-position: center;
+  height: 100vh; /* or another value based on your needs */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white; /* Change text color to make it readable */
+}
+
+.generate-header{
+  margin-bottom: 20px;
+}
+
+.form-container {
+  width: 100%; /* Make the form container full width */
+  max-width: 600px; /* Optionally, set a max-width for the form */
+}
