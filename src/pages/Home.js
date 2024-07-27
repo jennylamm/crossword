@@ -1,18 +1,19 @@
 import React from "react";
 import "./Home.css";
-// import HomeImage from "../assests/images/HomeImage.png"
+import HomeLogo from "../assests/images/HomeLogo.gif";
 import SideBar from "../components/SideBar";
 import NavigateButton from "../components/NavigatePage";
 
 function Home() {
   return (
     <div className="Home">
-      <SideBar pageWrapId={"page-wrap"} outerContainerId={"outer-container"} />
-
       <header className="Home-header">
-        {/* <img src={HomeImage} className="App-logo" alt="logo" /> FOR LOGO*/} 
+        <img src={HomeLogo} className="Home-logo" alt="logo" />
+
       </header>
-      <NavigateButton className="play-button" to="/play">Play</NavigateButton>
+      <div className="play-button">
+          <NavigateButton to="/play">Play</NavigateButton>
+        </div>
     </div>
   );
 }

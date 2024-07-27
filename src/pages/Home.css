@@ -13,7 +13,6 @@
   
   
   .Home-header {
-    
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -27,9 +26,17 @@
     color: #61dafb;
   }
 
+  .Home-logo {
+    align-items: center;
+    width: 50%;
+    height: auto;
+  }
+
   .play-button {
-    position: absolute;
-    bottom: 50px;  }
+    bottom: 200px; 
+    align-items: center;
+  }
+
 
   
   
