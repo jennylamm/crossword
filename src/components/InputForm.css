@@ -1,3 +1,5 @@
 .crossword-form{
-    align-items: center;
+    position: absolute;
+    top: 30%;
+
 }

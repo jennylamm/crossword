@@ -1,0 +1,11 @@
+.configure-container {
+  background-image: url("../assests/images/ConfigureImage.PNG");
+  background-size: cover;
+  background-position: center;
+  height: 100vh; /* or another value based on your needs */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: rgb(62, 21, 21); /* Change text color to make it readable */
+}

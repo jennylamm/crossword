@@ -7,8 +7,8 @@ const Generate = () => {
   return (
     <div className="generate-container">
       <div className="generate-header">
-        <h1>Generate Page</h1>
-        <p>Welcome to the Generate page!</p>
+        <h1>Generate Your CrossWord</h1>
+        <p>Enter your words and clues!</p>
       </div>
         <InputForm />
     </div>
