@@ -1,7 +1,6 @@
 // src/components/CrosswordForm.js
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./InputForm.css";
 import { useCrossWordData } from "../context/Context";
 
 const InputForm = () => {
@@ -38,7 +37,6 @@ const InputForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
     navigate("/configure");
   };
 
