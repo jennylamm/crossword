@@ -21,17 +21,18 @@ const PositionAll = styled.div`
 const Configure = () => {
   const { formData, setFormData } = useCrossWordData();
 
-
   const formatWords = (formData) => {
-    let updatedFormData
+    let updatedFormData;
     // making all words uppercase
     updatedFormData = formData.map((item) => ({
       ...item,
       word: item.word.toUpperCase(),
     }));
 
-    // sorting words by decending order 
-    updatedFormData = updatedFormData.sort((a, b) => b.word.length - a.word.length);
+    // sorting words by decending order
+    updatedFormData = updatedFormData.sort(
+      (a, b) => b.word.length - a.word.length
+    );
     return updatedFormData;
   };
 
@@ -39,7 +40,40 @@ const Configure = () => {
     setFormData(formatWords(formData));
   };
 
+  const generatePin = (length) => {
+    let gamePin = "";
+    const characters = 'abcdefghijklmnopqrstuvwxyz';
 
+    for (let i = 0; i < length; i++) {
+      gamePin += characters.charAt(
+        Math.floor(Math.random() * length)
+      );
+    }
+    return gamePin;
+  };
+
+  const saveCrossWord = async (e) => {
+    const payload = {
+      gamePin: generatePin(6),
+      formData: JSON.stringify(formData),
+    };
+
+    console.log(payload)
+    const response = await fetch("/write-to-csv", {
+      // No need to specify localhost:3001 due to proxy
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (response.ok) {
+      alert("Data written to CSV");
+    } else {
+      alert("Failed to write to CSV");
+    }
+  };
 
   return (
     <PositionAll>
@@ -48,6 +82,7 @@ const Configure = () => {
         <p style={{ margin: "0px" }}>Make your crossword!</p>
       </PositionHeader>
       <button onClick={() => createCrossWord(formData)}>Create</button>
+      <button onClick={() => saveCrossWord()}>Save</button>
     </PositionAll>
   );
 };
