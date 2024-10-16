@@ -36,18 +36,114 @@ const Configure = () => {
     return updatedFormData;
   };
 
-  const createCrossWord = (formData) => {
-    setFormData(formatWords(formData));
+  const createEmptyGrid = (size = 10) => {
+    return Array(size).fill(null).map(() => Array(size).fill(''));
   };
+
+  const createCrossWord = (formData) => {
+    const formattedWords = formatWords(formData);
+    const grid = createEmptyGrid();
+    
+    // Place the first word in the middle horizontally
+    const firstWord = formattedWords[0].word;
+    placeFirstWord(grid, firstWord);
+  
+    // Try to place each remaining word
+    for (let i = 1; i < formattedWords.length; i++) {
+      const word = formattedWords[i].word;
+      let placed = false;
+  
+      // Check for possible intersections with words already on the grid
+      for (let row = 0; row < grid.length; row++) {
+        for (let col = 0; col < grid[0].length; col++) {
+          const intersectingLetter = grid[row][col];
+  
+          if (intersectingLetter && word.includes(intersectingLetter)) {
+            const intersectionIndex = word.indexOf(intersectingLetter);
+            placed = attemptToPlaceWord(grid, word, row, col, intersectionIndex);
+            if (placed) break;
+          }
+        }
+        if (placed) break;
+      }
+  
+      // If the word couldn't be placed, continue with the next word
+      if (!placed) {
+        console.log(`Could not place the word: ${word}`);
+      }
+    }
+
+    console.log(grid)
+  
+    return grid;
+  };
+  
+  // Place the first word horizontally in the center
+  const placeFirstWord = (grid, word) => {
+    const startRow = Math.floor(grid.length / 2);
+    const startCol = Math.floor((grid[0].length - word.length) / 2);
+    for (let i = 0; i < word.length; i++) {
+      grid[startRow][startCol + i] = word[i];
+    }
+  };
+  
+  // Attempt to place the word given a possible intersection point
+  const attemptToPlaceWord = (grid, word, row, col, intersectionIndex) => {
+    // Try placing horizontally
+    const canPlaceHorizontally = checkAndPlace(grid, word, row, col - intersectionIndex, 'horizontal');
+    
+    if (canPlaceHorizontally) return true;
+    
+    // Try placing vertically
+    const canPlaceVertically = checkAndPlace(grid, word, row - intersectionIndex, col, 'vertical');
+    
+    return canPlaceVertically;
+  };
+  
+  // Check if the word can be placed without interfering with other words
+  const checkAndPlace = (grid, word, startRow, startCol, direction) => {
+    const wordLength = word.length;
+  
+    if (direction === 'horizontal') {
+      if (startCol < 0 || startCol + wordLength > grid[0].length) return false;
+  
+      for (let i = 0; i < wordLength; i++) {
+        const currentCell = grid[startRow][startCol + i];
+        if (currentCell !== '' && currentCell !== word[i]) {
+          return false; // Conflict found
+        }
+      }
+  
+      // Place the word horizontally
+      for (let i = 0; i < wordLength; i++) {
+        grid[startRow][startCol + i] = word[i];
+      }
+    } else if (direction === 'vertical') {
+      if (startRow < 0 || startRow + wordLength > grid.length) return false;
+  
+      for (let i = 0; i < wordLength; i++) {
+        const currentCell = grid[startRow + i][startCol];
+        if (currentCell !== '' && currentCell !== word[i]) {
+          return false; // Conflict found
+        }
+      }
+  
+      // Place the word vertically
+      for (let i = 0; i < wordLength; i++) {
+        grid[startRow + i][startCol] = word[i];
+      }
+    }
+  
+    return true;
+  };
+  
 
   const generatePin = (length) => {
     let gamePin = "";
-    const characters = 'abcdefghijklmnopqrstuvwxyz';
+    const characters = "abcdefghijklmnopqrstuvwxyz";
 
     for (let i = 0; i < length; i++) {
-      gamePin += characters.charAt(
-        Math.floor(Math.random() * length)
-      );
+      gamePin += characters.charAt(Math.floor(Math.random() * length));
     }
     return gamePin;
   };
@@ -58,7 +154,7 @@ const Configure = () => {
       formData: JSON.stringify(formData),
     };
 
-    console.log(payload)
+    console.log(payload);
     const response = await fetch("/write-to-csv", {
       // No need to specify localhost:3001 due to proxy
       method: "POST",
