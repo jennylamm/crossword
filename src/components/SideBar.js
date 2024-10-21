@@ -13,6 +13,9 @@ const SideBar = () => {
       <a className="menu-item" href="/generate">
         Generate
       </a>
+      <a className="menu-item" href="/play">
+        Play
+      </a>
 
     </Menu>
   );

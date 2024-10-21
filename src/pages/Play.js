@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Configure.css";
 import styled from "styled-components";
 import { PositionHeader } from "../components/Styling";
-import img from "../assests/images/ConfigureImage.PNG";
+import img from "../assests/images/RajPlayImage.PNG";
 import Papa from "papaparse";
 
 const PositionAll = styled.div`

@@ -1,7 +1,6 @@
 import React from "react";
 import "./Home.css";
 import HomeLogo from "../assests/images/HomeLogo.gif";
-import SideBar from "../components/SideBar";
 import NavigateButton from "../components/NavigatePage";
 
 function Home() {
