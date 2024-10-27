@@ -37,7 +37,7 @@ const Configure = () => {
   };
 
   const createEmptyGrid = (size = 10) => {
-    return Array(size).fill(null).map(() => Array(size).fill(''));
+    return Array(size).fill(null).map(() => Array(size).fill('#'));
   };
 
   const createCrossWord = (formData) => {
@@ -60,6 +60,7 @@ const Configure = () => {
   
           if (intersectingLetter && word.includes(intersectingLetter)) {
             const intersectionIndex = word.indexOf(intersectingLetter);
+            console.log('intersecting letter', intersectingLetter, row, col, intersectionIndex)
             placed = attemptToPlaceWord(grid, word, row, col, intersectionIndex);
             if (placed) break;
           }
@@ -90,47 +91,72 @@ const Configure = () => {
   // Attempt to place the word given a possible intersection point
   const attemptToPlaceWord = (grid, word, row, col, intersectionIndex) => {
     // Try placing horizontally
-    const canPlaceHorizontally = checkAndPlace(grid, word, row, col - intersectionIndex, 'horizontal');
+    const canPlaceHorizontally = checkAndPlace(grid, word, row, col ,intersectionIndex,  'horizontal');
     
     if (canPlaceHorizontally) return true;
     
     // Try placing vertically
-    const canPlaceVertically = checkAndPlace(grid, word, row - intersectionIndex, col, 'vertical');
+    const canPlaceVertically = checkAndPlace(grid, word, row , col , intersectionIndex ,'vertical');
     
     return canPlaceVertically;
   };
   
   // Check if the word can be placed without interfering with other words
-  const checkAndPlace = (grid, word, startRow, startCol, direction) => {
+  const checkAndPlace = (grid, word, row, col, intersectionIndex, direction) => {
     const wordLength = word.length;
+    const quadrants = [[-1, -1], [-1, +1], [+1, -1], [+1,+1]]
   
     if (direction === 'horizontal') {
+      console.log('HORIZONTAL', word, `[${row}, ${col}]`)
+      const startCol = col - intersectionIndex
       if (startCol < 0 || startCol + wordLength > grid[0].length) return false;
   
       for (let i = 0; i < wordLength; i++) {
-        const currentCell = grid[startRow][startCol + i];
-        if (currentCell !== '' && currentCell !== word[i]) {
+        const currentCell = grid[row][startCol + i];
+        if (currentCell !== '#' && currentCell !== word[i]) {
+          return false; // Conflict found
+        }
+      }
+
+      for (let i = 0; i < quadrants.length; i ++) {
+        const adjustment = quadrants[i]
+        const currentCell = grid[row + adjustment[0]][col + adjustment[1]]
+        if (currentCell !== '#' && currentCell !== word[i]) {
           return false; // Conflict found
         }
       }
   
       // Place the word horizontally
       for (let i = 0; i < wordLength; i++) {
-        grid[startRow][startCol + i] = word[i];
+        grid[row][startCol + i] = word[i];
       }
     } else if (direction === 'vertical') {
+      console.log('VERITCAL', word, `[${row}, ${col}]`)
+      const startRow = row - intersectionIndex
+
       if (startRow < 0 || startRow + wordLength > grid.length) return false;
   
       for (let i = 0; i < wordLength; i++) {
-        const currentCell = grid[startRow + i][startCol];
-        if (currentCell !== '' && currentCell !== word[i]) {
+        const currentCell = grid[startRow + i][col];
+        if (currentCell !== '#' && currentCell !== word[i]) {
           return false; // Conflict found
         }
       }
+
+      for (let i = 0; i < quadrants.length; i ++) {
+        const adjustment = quadrants[i]
+        const currentCell = grid[row + adjustment[0]][col + adjustment[1]]
+        console.log(row + adjustment[0], col + adjustment[1], currentCell)
+        if (currentCell !== '#' && currentCell !== word[i]) {
+          return false; // Conflict found
+        }
+      }
+
+      // if( grid[startRow + i][startCol] !=='#')
   
       // Place the word vertically
       for (let i = 0; i < wordLength; i++) {
-        grid[startRow + i][startCol] = word[i];
+        grid[startRow + i][col] = word[i];
       }
     }
   

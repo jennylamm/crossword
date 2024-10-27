@@ -8,11 +8,11 @@ function Home() {
     <div className="Home">
       <header className="Home-header">
         <img src={HomeLogo} className="Home-logo" alt="logo" />
-
-      </header>
-      <div className="play-button">
+        <div className="play-button">
           <NavigateButton to="/play">Play</NavigateButton>
         </div>
+      </header>
+
     </div>
   );
 }
