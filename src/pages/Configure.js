@@ -60,7 +60,6 @@ const Configure = () => {
   
           if (intersectingLetter && word.includes(intersectingLetter)) {
             const intersectionIndex = word.indexOf(intersectingLetter);
-            console.log('intersecting letter', intersectingLetter, row, col, intersectionIndex)
             placed = attemptToPlaceWord(grid, word, row, col, intersectionIndex);
             if (placed) break;
           }
@@ -70,11 +69,8 @@ const Configure = () => {
   
       // If the word couldn't be placed, continue with the next word
       if (!placed) {
-        console.log(`Could not place the word: ${word}`);
       }
     }
-
-    console.log(grid)
   
     return grid;
   };
@@ -107,7 +103,6 @@ const Configure = () => {
     const quadrants = [[-1, -1], [-1, +1], [+1, -1], [+1,+1]]
   
     if (direction === 'horizontal') {
-      console.log('HORIZONTAL', word, `[${row}, ${col}]`)
       const startCol = col - intersectionIndex
       if (startCol < 0 || startCol + wordLength > grid[0].length) return false;
   
@@ -131,7 +126,6 @@ const Configure = () => {
         grid[row][startCol + i] = word[i];
       }
     } else if (direction === 'vertical') {
-      console.log('VERITCAL', word, `[${row}, ${col}]`)
       const startRow = row - intersectionIndex
 
       if (startRow < 0 || startRow + wordLength > grid.length) return false;
@@ -146,7 +140,6 @@ const Configure = () => {
       for (let i = 0; i < quadrants.length; i ++) {
         const adjustment = quadrants[i]
         const currentCell = grid[row + adjustment[0]][col + adjustment[1]]
-        console.log(row + adjustment[0], col + adjustment[1], currentCell)
         if (currentCell !== '#' && currentCell !== word[i]) {
           return false; // Conflict found
         }
@@ -180,7 +173,6 @@ const Configure = () => {
       formData: JSON.stringify(formData),
     };
 
-    console.log(payload);
     const response = await fetch("/write-to-csv", {
       // No need to specify localhost:3001 due to proxy
       method: "POST",

@@ -19,7 +19,6 @@ app.post("/write-to-csv", (req, res) => {
     .writeRecords([newData])
     .then(() => res.status(200).send("CSV file updated successfully"))
     .catch((err) => {
-      console.log("400 errors", err);
       res.status(500).send("Error writing to CSV");
     });
 });

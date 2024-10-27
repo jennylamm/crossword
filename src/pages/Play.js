@@ -38,12 +38,10 @@ const Play = () => {
   }, []);
 
   const handleSubmit = (e) => {
-    console.log("handleSubmit", csvData);
     e.preventDefault();
 
     // Search for the inputCode in the CSV data
     const foundRow = csvData.find((row) => row.gamePin === inputCode);
-    console.log(foundRow);
 
     if (foundRow) {
       setFormDataResult(foundRow.formData);
