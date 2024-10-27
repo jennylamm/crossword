@@ -36,7 +36,7 @@ const Configure = () => {
     return updatedFormData;
   };
 
-  const createEmptyGrid = (size = 10) => {
+  const createEmptyGrid = (size = 15) => {
     return Array(size).fill(null).map(() => Array(size).fill('#'));
   };
 
