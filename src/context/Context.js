@@ -22,8 +22,10 @@ export const CrossWordProvider = ({ children }) => {
     { word: "tottis", clue: "14" },
   ]);
 
+  const [finalGrid, setFinalGrid] = useState([])
+
   return (
-    <CrossWordContext.Provider value={{ formData, setFormData }}>
+    <CrossWordContext.Provider value={{ formData, setFormData, finalGrid, setFinalGrid }}>
       {children}
     </CrossWordContext.Provider>
   );

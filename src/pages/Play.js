@@ -25,7 +25,7 @@ const Play = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    fetch("./public/data.csv")
+    fetch("/data.csv")
       .then((response) => response.text())
       .then((csvText) => {
         Papa.parse(csvText, {

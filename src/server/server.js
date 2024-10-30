@@ -8,13 +8,14 @@ const csvWriter = createCsvWriter({
   path: "./data.csv",
   header: [
     { id: "gamePin", title: "gamePin" },
-    { id: "formData", title: "formData" },
+    { id: "grid", title: "grid" },
   ],
   append: true,
 });
 
 app.post("/write-to-csv", (req, res) => {
   const newData = req.body;
+  console.log(newData)
   csvWriter
     .writeRecords([newData])
     .then(() => res.status(200).send("CSV file updated successfully"))
