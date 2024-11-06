@@ -6,26 +6,40 @@ const CrossWordContext = createContext();
 // Create a provider component
 export const CrossWordProvider = ({ children }) => {
   const [formData, setFormData] = useState([
-    { word: "ong", clue: "1" },
-    { word: "cripsy", clue: "2" },
-    { word: "wifeylifely", clue: "3" },
-    { word: "leprocorn", clue: "4" },
-    { word: "noodling", clue: "5" },
-    { word: "hangrr", clue: "6" },
-    { word: "yes", clue: "7" },
-    { word: "wanaka", clue: "8" },
-    { word: "lamglish", clue: "9" },
-    { word: "hazards", clue: "10" },
-    { word: "bsfr", clue: "11" },
-    { word: "gaggy", clue: "12" },
-    { word: "papa", clue: "13" },
-    { word: "tottis", clue: "14" },
+    { word: "ong", clue: "Alnerate Spelling to omg" },
+    { word: "cripsy", clue: "How we like our chips" },
+    { word: "wifeylifely", clue: "___4___" },
+    { word: "leprocorn", clue: "something about Jesus" },
+    { word: "noodling", clue: "a carb, perphaps" },
+    { word: "hangrr", clue: "anger hanrgy" },
+    { word: "yes", clue: "tawian reading" },
+    { word: "wanaka", clue: "new zealands" },
+    { word: "lamglish", clue: "alt lanagueg" },
+    { word: "hazards", clue: "blinkging " },
+    { word: "bsfr", clue: "be SO FOR REAL" },
+    { word: "gaggy", clue: "3.2342342342324" },
+    { word: "papa", clue: "downtown abbey" },
+    { word: "tottis", clue: "tiramisu" },
   ]);
 
-  const [finalGrid, setFinalGrid] = useState([])
+  const [finalGrid, setFinalGrid] = useState([]);
+  const [horizontalClues, setHorizontalClues] = useState([]);
+
+  const [verticalClues, setVerticalClues] = useState([]);
 
   return (
-    <CrossWordContext.Provider value={{ formData, setFormData, finalGrid, setFinalGrid }}>
+    <CrossWordContext.Provider
+      value={{
+        formData,
+        setFormData,
+        finalGrid,
+        setFinalGrid,
+        horizontalClues,
+        setHorizontalClues,
+        verticalClues,
+        setVerticalClues,
+      }}
+    >
       {children}
     </CrossWordContext.Provider>
   );

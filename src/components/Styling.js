@@ -5,4 +5,5 @@ export const PositionHeader = styled.div`
   top: 15%;
   left: 15%;
   padding-left: 20px;
+  white-space: nowrap;
 `;

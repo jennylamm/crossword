@@ -6,6 +6,22 @@ import { PositionHeader } from "../components/Styling";
 import img from "../assests/images/ConfigureImage.PNG";
 import DisplayCrossWord from "../components/DisplayCrossWord";
 
+const ClueList = ({ clues, direction }) => {
+  return (
+    <div>
+      <div className="clue-number">{direction}</div>
+
+      {clues.map((clue, index) => (
+        <div key={index} className="clue-item">
+          <div className="clue-text">
+            {clue.number}. {clue.clue}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const PositionAll = styled.div`
   background-image: url(${img});
   background-size: cover;
@@ -17,6 +33,14 @@ const PositionAll = styled.div`
   align-items: center;
   color: rgb(62, 21, 21);
   font-family: "Lexend Deca", sans-serif;
+  display: grid;
+  grid-template-columns: 4fr 3fr;
+  gap: 20px;
+`;
+
+const PositionBoth = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const PositionGrid = styled.div`
@@ -28,8 +52,20 @@ const PositionGrid = styled.div`
   flex-direction: column;
 `;
 
+const DisplayClues = styled.div`
+  align: center;
+`;
+
 const Configure = () => {
-  const { formData, finalGrid, setFinalGrid } = useCrossWordData();
+  const {
+    formData,
+    finalGrid,
+    setFinalGrid,
+    horizontalClues,
+    setHorizontalClues,
+    verticalClues,
+    setVerticalClues,
+  } = useCrossWordData();
 
   const formatWords = (formData) => {
     let updatedFormData;
@@ -91,6 +127,8 @@ const Configure = () => {
     }
 
     setFinalGrid(grid);
+
+    setTimeout(() => generateClues(grid, formData), 3000);
     console.log(grid);
     return true;
   };
@@ -200,6 +238,75 @@ const Configure = () => {
     return true;
   };
 
+  const generateClues = (finalGrid, formData) => {
+    const tempHorizontalClues = [];
+    const tempVerticalClues = [];
+    let clueIndex = 1;
+    const formDataMap = Object.fromEntries(
+      formData.map(({ word, clue }) => [word.toUpperCase(), clue])
+    );
+
+    for (let row = 0; row < finalGrid.length; row++) {
+      for (let col = 0; col < finalGrid[row].length; col++) {
+        if (finalGrid[row][col] !== "") {
+          // Check for start of horizontal word
+          if (
+            col + 1 < finalGrid[row].length &&
+            finalGrid[row][col + 1] !== "" && // Right cell exists and is non-empty
+            (col === 0 || finalGrid[row][col - 1] === "")
+          ) {
+            let horizontalWord = "";
+            let c = col;
+            while (c < finalGrid[row].length && finalGrid[row][c] !== "") {
+              horizontalWord += finalGrid[row][c];
+              c++;
+            }
+
+            // Match horizontal word with formData
+            if (formDataMap[horizontalWord]) {
+              tempHorizontalClues.push({
+                number: clueIndex,
+                clue: formDataMap[horizontalWord],
+                word: horizontalWord,
+                position: [row, col],
+              });
+              clueIndex++;
+            }
+          }
+
+          // Check for vertical word
+          if (
+            row + 1 < finalGrid.length &&
+            finalGrid[row + 1][col] !== "" && // Below cell exists and is non-empty
+            (row === 0 || finalGrid[row - 1][col] === "") // Above cell is either out of bounds or empty
+          ) {
+            let verticalWord = "";
+            let r = row;
+            while (r < finalGrid.length && finalGrid[r][col] !== "") {
+              verticalWord += finalGrid[r][col];
+              r++;
+            }
+
+            // Match vertical word with formData
+            if (formDataMap[verticalWord]) {
+              tempVerticalClues.push({
+                number: clueIndex,
+                clue: formDataMap[verticalWord],
+                word: verticalWord,
+                position: [row, col],
+              });
+              clueIndex++;
+            }
+          }
+        }
+      }
+    }
+
+    setVerticalClues(tempVerticalClues);
+    setHorizontalClues(tempHorizontalClues);
+    console.log(tempVerticalClues, tempHorizontalClues);
+  };
+
   const generatePin = (length) => {
     let gamePin = "";
     const characters = "abcdefghijklmnopqrstuvwxyz";
@@ -215,8 +322,6 @@ const Configure = () => {
       gamePin: generatePin(6),
       grid: JSON.stringify(finalGrid),
     };
-
-    console.log(payload);
 
     const response = await fetch("/write-to-csv", {
       // No need to specify localhost:3001 due to proxy
@@ -240,15 +345,20 @@ const Configure = () => {
 
   return (
     <PositionAll>
-      <PositionHeader>
-        <h1 style={{ marginBottom: "10px" }}>Configure Page</h1>
-        <p style={{ margin: "0px" }}>Make your crossword!</p>
-      </PositionHeader>
-      <PositionGrid>
-        <DisplayCrossWord>{finalGrid}</DisplayCrossWord>
-      </PositionGrid>
+      <PositionBoth>
+        <PositionHeader>
+          <h1 style={{ marginBottom: "10px" }}>Configure Page</h1>
+          <p style={{ margin: "0px" }}>Make your crossword!</p>
+        </PositionHeader>
+        <PositionGrid>
+          <DisplayCrossWord>{finalGrid}</DisplayCrossWord>
+        </PositionGrid>
+      </PositionBoth>
+      <DisplayClues>
+        <ClueList clues={horizontalClues} direction={'Across'} />
+        <ClueList clues={verticalClues} direction={'Down'} />
 
-      {/* <button onClick={() => saveCrossWord()}>Save</button> */}
+      </DisplayClues>
     </PositionAll>
   );
 };
