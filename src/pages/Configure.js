@@ -1,26 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Configure.css";
 import styled from "styled-components";
 import { useCrossWordData } from "../context/Context";
 import { PositionHeader } from "../components/Styling";
 import img from "../assests/images/ConfigureImage.PNG";
 import DisplayCrossWord from "../components/DisplayCrossWord";
-
-const ClueList = ({ clues, direction }) => {
-  return (
-    <div>
-      <div className="clue-number">{direction}</div>
-
-      {clues.map((clue, index) => (
-        <div key={index} className="clue-item">
-          <div className="clue-text">
-            {clue.number}. {clue.clue}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
+import ClueList from "../components/ClueList";
+import GamePinModal from "../components/GamePinModal";
 
 const PositionAll = styled.div`
   background-image: url(${img});
@@ -66,6 +52,12 @@ const Configure = () => {
     verticalClues,
     setVerticalClues,
   } = useCrossWordData();
+
+  const [modalShow, setModalShow] = useState(false);
+  const [gamePin, setGamePin ] = useState('')
+
+  const handleClose = () => setModalShow(false);
+  const handleShow = () => setModalShow(true);
 
   const formatWords = (formData) => {
     let updatedFormData;
@@ -127,9 +119,6 @@ const Configure = () => {
     }
 
     setFinalGrid(grid);
-
-    setTimeout(() => generateClues(grid, formData), 3000);
-    console.log(grid);
     return true;
   };
 
@@ -304,7 +293,6 @@ const Configure = () => {
 
     setVerticalClues(tempVerticalClues);
     setHorizontalClues(tempHorizontalClues);
-    console.log(tempVerticalClues, tempHorizontalClues);
   };
 
   const generatePin = (length) => {
@@ -318,8 +306,10 @@ const Configure = () => {
   };
 
   const saveCrossWord = async (e) => {
+    const generatedPin = generatePin(6)
+    setGamePin(generatedPin)
     const payload = {
-      gamePin: generatePin(6),
+      gamePin: generatedPin,
       grid: JSON.stringify(finalGrid),
     };
 
@@ -332,11 +322,13 @@ const Configure = () => {
       body: JSON.stringify(payload),
     });
 
+    console.log(payload.gamePin);
+    
+
     if (response.ok) {
-      alert("Data written to CSV");
-    } else {
-      alert("Failed to write to CSV");
+      setModalShow(true);
     }
+    else setModalShow(true)
   };
 
   useEffect(() => {
@@ -345,6 +337,11 @@ const Configure = () => {
 
   return (
     <PositionAll>
+      <GamePinModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        gamePin={gamePin}
+      />
       <PositionBoth>
         <PositionHeader>
           <h1 style={{ marginBottom: "10px" }}>Configure Page</h1>
@@ -355,9 +352,9 @@ const Configure = () => {
         </PositionGrid>
       </PositionBoth>
       <DisplayClues>
-        <ClueList clues={horizontalClues} direction={'Across'} />
-        <ClueList clues={verticalClues} direction={'Down'} />
-
+        <ClueList clues={horizontalClues} direction={"Across"} />
+        <ClueList clues={verticalClues} direction={"Down"} />
+        <button onClick={() => saveCrossWord()}>Save</button>
       </DisplayClues>
     </PositionAll>
   );
