@@ -1,46 +1,42 @@
 import React, { useEffect, useState } from "react";
-import "./Configure.css";
 import styled from "styled-components";
 import { useCrossWordData } from "../context/Context";
-import { PositionHeader } from "../components/Styling";
 import img from "../assests/images/ConfigureImage.PNG";
 import DisplayCrossWord from "../components/DisplayCrossWord";
 import ClueList from "../components/ClueList";
 import GamePinModal from "../components/GamePinModal";
 
 const PositionAll = styled.div`
+  flex-direction: column;
+  align-items: center;
+  color: rgb(62, 21, 21);
+  font-family: "Lexend Deca", sans-serif;
   background-image: url(${img});
   background-size: cover;
   background-position: center;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: rgb(62, 21, 21);
-  font-family: "Lexend Deca", sans-serif;
-  display: grid;
+  display:grid;
   grid-template-columns: 4fr 3fr;
-  gap: 20px;
 `;
 
 const PositionBoth = styled.div`
-  display: flex;
-  flex-direction: column;
+padding-left: 20%;
+margin: 10px
 `;
 
 const PositionGrid = styled.div`
-  position: absolute;
-  top: 30%; /* Position it below the header */
-  left: 15%;
-  padding-left: 20px;
-  display: flex;
-  flex-direction: column;
+padding-top: 20px;
+padding-left: 20px;
 `;
 
 const DisplayClues = styled.div`
-  align: center;
+margin: 10px;
+white-space: nowrap;
 `;
+
+const StyledButton = styled.button`
+margin-top: 30px
+`
 
 const Configure = () => {
   const {
@@ -54,7 +50,7 @@ const Configure = () => {
   } = useCrossWordData();
 
   const [modalShow, setModalShow] = useState(false);
-  const [gamePin, setGamePin ] = useState('')
+  const [gamePin, setGamePin] = useState("");
 
   const handleClose = () => setModalShow(false);
   const handleShow = () => setModalShow(true);
@@ -119,6 +115,11 @@ const Configure = () => {
     }
 
     setFinalGrid(grid);
+    try {
+      generateClues(grid, formData);
+    } catch {
+      console.log("could not display clues");
+    }
     return true;
   };
 
@@ -306,8 +307,8 @@ const Configure = () => {
   };
 
   const saveCrossWord = async (e) => {
-    const generatedPin = generatePin(6)
-    setGamePin(generatedPin)
+    const generatedPin = generatePin(6);
+    setGamePin(generatedPin);
     const payload = {
       gamePin: generatedPin,
       grid: JSON.stringify(finalGrid),
@@ -323,12 +324,10 @@ const Configure = () => {
     });
 
     console.log(payload.gamePin);
-    
 
     if (response.ok) {
       setModalShow(true);
-    }
-    else setModalShow(true)
+    } else setModalShow(true);
   };
 
   useEffect(() => {
@@ -343,10 +342,8 @@ const Configure = () => {
         gamePin={gamePin}
       />
       <PositionBoth>
-        <PositionHeader>
-          <h1 style={{ marginBottom: "10px" }}>Configure Page</h1>
+          <h1 style={{ marginBottom: "10px" }}>Configure Crossword</h1>
           <p style={{ margin: "0px" }}>Make your crossword!</p>
-        </PositionHeader>
         <PositionGrid>
           <DisplayCrossWord>{finalGrid}</DisplayCrossWord>
         </PositionGrid>
@@ -354,7 +351,9 @@ const Configure = () => {
       <DisplayClues>
         <ClueList clues={horizontalClues} direction={"Across"} />
         <ClueList clues={verticalClues} direction={"Down"} />
+        <StyledButton>
         <button onClick={() => saveCrossWord()}>Save</button>
+        </StyledButton>
       </DisplayClues>
     </PositionAll>
   );

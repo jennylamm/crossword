@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Configure.css";
 import styled from "styled-components";
-import { PositionHeader } from "../components/Styling";
 import img from "../assests/images/RajPlayImage.PNG";
 import Papa from "papaparse";
 
@@ -54,10 +52,8 @@ const Play = () => {
 
   return (
     <PositionAll>
-      <PositionHeader>
         <h1 style={{ marginBottom: "10px" }}>Play</h1>
         <p style={{ margin: "0px" }}>Enter your pin to load your crossword</p>
-      </PositionHeader>
 
       <form onSubmit={handleSubmit}>
         <input
@@ -68,7 +64,6 @@ const Play = () => {
         <button type="submit">Submit</button>
       </form>
 
-      {/* NOTE TO DEV: replace this with a loaded crossword */}
       {formDataResult && (
         <div>
           <h2>Form Data:</h2>

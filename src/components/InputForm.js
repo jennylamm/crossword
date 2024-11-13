@@ -2,6 +2,27 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useCrossWordData } from "../context/Context";
+import deleteIcon from "../assests/images/bin.svg";
+import styled from "styled-components";
+
+const DeleteButton = styled.button`
+  background: none;
+  border: none;
+  padding-left: 2px;
+  cursor: pointer;
+
+  img {
+    width: 20px;
+    height: 20px;
+  }
+`;
+
+const PositionButtons = styled.div`
+  padding-top: 10px;
+  display: flex;
+  gap: 5px;
+`;
+
 
 const InputForm = () => {
   const navigate = useNavigate();
@@ -62,6 +83,9 @@ const InputForm = () => {
               </td>
               <td>
                 <input
+                  style={{
+                    width: "250px",
+                  }}
                   type="text"
                   value={item.clue}
                   onChange={(e) => handleChange(index, "clue", e.target.value)}
@@ -69,18 +93,23 @@ const InputForm = () => {
                 />
               </td>
               <td>
-                <button type="button" onClick={() => handleDeleteClick(index)}>
-                  Delete
-                </button>
+                <DeleteButton
+                  type="button"
+                  onClick={() => handleDeleteClick(index)}
+                >
+                  <img src={deleteIcon} alt="Delete" />
+                </DeleteButton>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button type="button" onClick={handleAddClick}>
-        Add
-      </button>
-      <button type="submit">Submit</button>
+      <PositionButtons>
+        <button type="button" onClick={handleAddClick}>
+          Add
+        </button>
+        <button type="submit">Submit</button>
+      </PositionButtons>
     </form>
   );
 };

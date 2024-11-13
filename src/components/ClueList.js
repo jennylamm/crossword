@@ -2,8 +2,8 @@ import React from "react";
 
 const ClueList = ({ clues, direction }) => {
     return (
-      <div>
-        <div className="clue-number">{direction}</div>
+      <>
+        <h4 style={{ marginBottom: "3px" }}>{direction}</h4>
   
         {clues.map((clue, index) => (
           <div key={index} className="clue-item">
@@ -12,7 +12,7 @@ const ClueList = ({ clues, direction }) => {
             </div>
           </div>
         ))}
-      </div>
+      </>
     );
   };
 

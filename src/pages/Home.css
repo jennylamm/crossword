@@ -5,12 +5,7 @@
     background-repeat: no-repeat;
     background-size: cover;
   }
-  
-  .Home-logo {
-    height: 90vmin;
-    pointer-events: none;
-  }
-  
+
   
   .Home-header {
     min-height: 100vh;
