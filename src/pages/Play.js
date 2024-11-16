@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import img from "../assests/images/RajPlayImage.PNG";
 import Papa from "papaparse";
+import PlayInput from "../components/PlayInput";
 
 const PositionAll = styled.div`
   background-image: url(${img});
@@ -10,69 +11,68 @@ const PositionAll = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   color: rgb(62, 21, 21);
   font-family: "Lexend Deca", sans-serif;
 `;
 
+const PositionBoth = styled.div`
+  padding-left: 10%;
+  padding-top: 5%;
+  margin: 30px;
+`;
+
+const PositionInput = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
+
 const Play = () => {
-  const [csvData, setCsvData] = useState([]);
-  const [inputCode, setInputCode] = useState("");
-  const [formDataResult, setFormDataResult] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
+  // const [csvData, setCsvData] = useState([]);
+  // const [inputCode, setInputCode] = useState("");
+  // const [formDataResult, setFormDataResult] = useState(null);
+  // const [errorMessage, setErrorMessage] = useState("");
 
-  useEffect(() => {
-    fetch("/data.csv")
-      .then((response) => response.text())
-      .then((csvText) => {
-        Papa.parse(csvText, {
-          header: true, // CSV file has headers
-          complete: (result) => {
-            setCsvData(result.data); // Store the parsed CSV data
-          },
-        });
-      });
-  }, []);
+  // useEffect(() => {
+  //   fetch("/data.csv")
+  //     .then((response) => response.text())
+  //     .then((csvText) => {
+  //       Papa.parse(csvText, {
+  //         header: true, // CSV file has headers
+  //         complete: (result) => {
+  //           setCsvData(result.data); // Store the parsed CSV data
+  //         },
+  //       });
+  //     });
+  // }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
 
-    // Search for the inputCode in the CSV data
-    const foundRow = csvData.find((row) => row.gamePin === inputCode);
+  //   console.log("handle submit")
 
-    if (foundRow) {
-      setFormDataResult(foundRow.formData);
-      setErrorMessage("");
-    } else {
-      setFormDataResult(null);
-      setErrorMessage("Code not found");
-    }
-  };
+  //   // Search for the inputCode in the CSV data
+  //   const foundRow = csvData.find((row) => row.gamePin === inputCode);
+  //   console.log(foundRow)
+
+  //   if (foundRow) {
+  //     setFormDataResult(foundRow.across);
+  //     setErrorMessage("");
+  //   } else {
+  //     setFormDataResult(null);
+  //     setErrorMessage("Code not found");
+  //   }
+  // };
 
   return (
     <PositionAll>
-      <h1 style={{ marginBottom: "10px" }}>Play</h1>
-      <p style={{ margin: "0px" }}>Enter your pin to load your crossword</p>
-
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={inputCode}
-          onChange={(e) => setInputCode(e.target.value)}
-        />
-        <button type="submit">Submit</button>
-      </form>
-
-      {formDataResult && (
-        <div>
-          <h2>Form Data:</h2>
-          <p>{formDataResult}</p>
-        </div>
-      )}
-
-      {/* Display error message if code is not found */}
-      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+      <PositionBoth>
+        <h1 style={{ marginBottom: "10px" }}>Play</h1>
+      </PositionBoth>
+      <PositionInput>
+        <PlayInput />
+      </PositionInput>
     </PositionAll>
   );
 };
