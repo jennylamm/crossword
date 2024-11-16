@@ -15,28 +15,28 @@ const PositionAll = styled.div`
   background-size: cover;
   background-position: center;
   height: 100vh;
-  display:grid;
+  display: grid;
   grid-template-columns: 4fr 3fr;
 `;
 
 const PositionBoth = styled.div`
-padding-left: 20%;
-margin: 10px
+  padding-left: 20%;
+  margin: 10px;
 `;
 
 const PositionGrid = styled.div`
-padding-top: 20px;
-padding-left: 20px;
+  padding-top: 20px;
+  padding-left: 20px;
 `;
 
 const DisplayClues = styled.div`
-margin: 10px;
-white-space: nowrap;
+  margin: 10px;
+  white-space: nowrap;
 `;
 
-const StyledButton = styled.button`
-margin-top: 30px
-`
+const StyledButton = styled.div`
+  margin-top: 30px;
+`;
 
 const Configure = () => {
   const {
@@ -298,10 +298,12 @@ const Configure = () => {
 
   const generatePin = (length) => {
     let gamePin = "";
-    const characters = "abcdefghijklmnopqrstuvwxyz";
+    const characters = "abcdefghijklmnopqrstuvwxyz1234567890";
 
     for (let i = 0; i < length; i++) {
-      gamePin += characters.charAt(Math.floor(Math.random() * length));
+      gamePin += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
     }
     return gamePin;
   };
@@ -312,6 +314,8 @@ const Configure = () => {
     const payload = {
       gamePin: generatedPin,
       grid: JSON.stringify(finalGrid),
+      across: JSON.stringify(horizontalClues),
+      down: JSON.stringify(verticalClues),
     };
 
     const response = await fetch("/write-to-csv", {
@@ -323,7 +327,7 @@ const Configure = () => {
       body: JSON.stringify(payload),
     });
 
-    console.log(payload.gamePin);
+    console.log(payload);
 
     if (response.ok) {
       setModalShow(true);
@@ -339,11 +343,12 @@ const Configure = () => {
       <GamePinModal
         show={modalShow}
         onHide={() => setModalShow(false)}
-        gamePin={gamePin}
+        gamepin={gamePin}
       />
+
       <PositionBoth>
-          <h1 style={{ marginBottom: "10px" }}>Configure Crossword</h1>
-          <p style={{ margin: "0px" }}>Make your crossword!</p>
+        <h1 style={{ marginBottom: "10px" }}>Configure Crossword</h1>
+        <p style={{ margin: "0px" }}>Make your crossword!</p>
         <PositionGrid>
           <DisplayCrossWord>{finalGrid}</DisplayCrossWord>
         </PositionGrid>
@@ -352,7 +357,7 @@ const Configure = () => {
         <ClueList clues={horizontalClues} direction={"Across"} />
         <ClueList clues={verticalClues} direction={"Down"} />
         <StyledButton>
-        <button onClick={() => saveCrossWord()}>Save</button>
+          <button onClick={() => saveCrossWord()}>Save</button>
         </StyledButton>
       </DisplayClues>
     </PositionAll>

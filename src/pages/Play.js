@@ -52,8 +52,8 @@ const Play = () => {
 
   return (
     <PositionAll>
-        <h1 style={{ marginBottom: "10px" }}>Play</h1>
-        <p style={{ margin: "0px" }}>Enter your pin to load your crossword</p>
+      <h1 style={{ marginBottom: "10px" }}>Play</h1>
+      <p style={{ margin: "0px" }}>Enter your pin to load your crossword</p>
 
       <form onSubmit={handleSubmit}>
         <input

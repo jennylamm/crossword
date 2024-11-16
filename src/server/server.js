@@ -9,6 +9,8 @@ const csvWriter = createCsvWriter({
   header: [
     { id: "gamePin", title: "gamePin" },
     { id: "grid", title: "grid" },
+    { id: "across", title:"across" }, 
+    { id: "down", title: "down"}
   ],
   append: true,
 });
