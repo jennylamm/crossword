@@ -26,8 +26,6 @@ const PositionCell = styled.div`
 const DisplayCrossWord = () => {
   const { finalGrid } = useCrossWordData();
 
-
-
   return (
     <PositionGrid>
             {finalGrid.map((row, rowIndex) => (

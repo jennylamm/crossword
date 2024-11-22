@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import img from "../assests/images/RajPlayImage.PNG";
-import Papa from "papaparse";
 import PlayInput from "../components/PlayInput";
+import { useCrossWordData } from "../context/Context";
+import PlayCrossword from "../components/PlayCrossword";
 
 const PositionAll = styled.div`
   background-image: url(${img});
@@ -29,41 +30,9 @@ const PositionInput = styled.div`
 `;
 
 const Play = () => {
-  // const [csvData, setCsvData] = useState([]);
-  // const [inputCode, setInputCode] = useState("");
-  // const [formDataResult, setFormDataResult] = useState(null);
-  // const [errorMessage, setErrorMessage] = useState("");
+  const { playPinSubmitted, finalGrid } = useCrossWordData();
 
-  // useEffect(() => {
-  //   fetch("/data.csv")
-  //     .then((response) => response.text())
-  //     .then((csvText) => {
-  //       Papa.parse(csvText, {
-  //         header: true, // CSV file has headers
-  //         complete: (result) => {
-  //           setCsvData(result.data); // Store the parsed CSV data
-  //         },
-  //       });
-  //     });
-  // }, []);
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   console.log("handle submit")
-
-  //   // Search for the inputCode in the CSV data
-  //   const foundRow = csvData.find((row) => row.gamePin === inputCode);
-  //   console.log(foundRow)
-
-  //   if (foundRow) {
-  //     setFormDataResult(foundRow.across);
-  //     setErrorMessage("");
-  //   } else {
-  //     setFormDataResult(null);
-  //     setErrorMessage("Code not found");
-  //   }
-  // };
+  console.log("play", finalGrid)
 
   return (
     <PositionAll>
@@ -71,7 +40,7 @@ const Play = () => {
         <h1 style={{ marginBottom: "10px" }}>Play</h1>
       </PositionBoth>
       <PositionInput>
-        <PlayInput />
+        {playPinSubmitted? <PlayCrossword/> : <PlayInput />}
       </PositionInput>
     </PositionAll>
   );

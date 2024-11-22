@@ -8,7 +8,7 @@ export const CrossWordProvider = ({ children }) => {
   const [formData, setFormData] = useState([
     { word: "ong", clue: "Alnerate Spelling to omg" },
     { word: "cripsy", clue: "How we like our chips" },
-    { word: "wifeylifely", clue: "___4___" },
+    { word: "wifeylifey", clue: "___4___" },
     { word: "leprocorn", clue: "something about Jesus" },
     { word: "noodling", clue: "a carb, perphaps" },
     { word: "hangrr", clue: "anger hanrgy" },
@@ -24,8 +24,9 @@ export const CrossWordProvider = ({ children }) => {
 
   const [finalGrid, setFinalGrid] = useState([]);
   const [horizontalClues, setHorizontalClues] = useState([]);
-
   const [verticalClues, setVerticalClues] = useState([]);
+  const [playPinSubmitted, setPlayPinSubmitted] = useState(false);
+
 
   return (
     <CrossWordContext.Provider
@@ -38,6 +39,8 @@ export const CrossWordProvider = ({ children }) => {
         setHorizontalClues,
         verticalClues,
         setVerticalClues,
+        playPinSubmitted, 
+        setPlayPinSubmitted
       }}
     >
       {children}
