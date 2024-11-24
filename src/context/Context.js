@@ -6,20 +6,11 @@ const CrossWordContext = createContext();
 // Create a provider component
 export const CrossWordProvider = ({ children }) => {
   const [formData, setFormData] = useState([
-    { word: "ong", clue: "Alnerate Spelling to omg" },
-    { word: "cripsy", clue: "How we like our chips" },
-    { word: "wifeylifey", clue: "___4___" },
-    { word: "leprocorn", clue: "something about Jesus" },
-    { word: "noodling", clue: "a carb, perphaps" },
-    { word: "hangrr", clue: "anger hanrgy" },
-    { word: "yes", clue: "tawian reading" },
-    { word: "wanaka", clue: "new zealands" },
-    { word: "lamglish", clue: "alt lanagueg" },
-    { word: "hazards", clue: "blinkging " },
-    { word: "bsfr", clue: "be SO FOR REAL" },
-    { word: "gaggy", clue: "3.2342342342324" },
-    { word: "papa", clue: "downtown abbey" },
-    { word: "tottis", clue: "tiramisu" },
+    { word: "", clue: "" },
+    { word: "", clue: "" },
+    { word: "", clue: "" },
+    { word: "", clue: "" },
+    { word: "", clue: "" },
   ]);
 
   const [finalGrid, setFinalGrid] = useState([]);
