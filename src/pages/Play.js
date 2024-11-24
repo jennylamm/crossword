@@ -3,7 +3,7 @@ import styled from "styled-components";
 import img from "../assests/images/RajPlayImage.PNG";
 import PlayInput from "../components/PlayInput";
 import { useCrossWordData } from "../context/Context";
-import PlayCrossword from "../components/PlayCrossword";
+import PlayableCrossword from "../components/PlayableCrossword";
 
 const PositionAll = styled.div`
   background-image: url(${img});
@@ -40,7 +40,7 @@ const Play = () => {
         <h1 style={{ marginBottom: "10px" }}>Play</h1>
       </PositionBoth>
       <PositionInput>
-        {playPinSubmitted? <PlayCrossword/> : <PlayInput />}
+        {playPinSubmitted? <PlayableCrossword/> : <PlayInput />}
       </PositionInput>
     </PositionAll>
   );
