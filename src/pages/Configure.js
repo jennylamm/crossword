@@ -29,7 +29,7 @@ const PositionGrid = styled.div`
   padding-left: 20px;
 `;
 
-const DisplayClues = styled.div`
+export const DisplayClues = styled.div`
   margin: 10px;
   white-space: nowrap;
 `;
@@ -51,9 +51,6 @@ const Configure = () => {
 
   const [modalShow, setModalShow] = useState(false);
   const [gamePin, setGamePin] = useState("");
-
-  const handleClose = () => setModalShow(false);
-  const handleShow = () => setModalShow(true);
 
   const formatWords = (formData) => {
     let updatedFormData;
@@ -118,7 +115,6 @@ const Configure = () => {
     try {
       generateClues(grid, formData);
     } catch {
-      console.log("could not display clues");
     }
     return true;
   };
@@ -326,8 +322,6 @@ const Configure = () => {
       },
       body: JSON.stringify(payload),
     });
-
-    console.log(payload);
 
     if (response.ok) {
       setModalShow(true);

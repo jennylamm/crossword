@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useCrossWordData } from "../context/Context";
 
@@ -44,7 +44,7 @@ const ClueNumber = styled.span`
   color: rgb(62, 21, 21);
 `;
 
-const PlayableCrossword = () => {
+const PlayableCrossword = ({setModal}) => {
   const { finalGrid, verticalClues, horizontalClues } = useCrossWordData();
 
   const CELL_SIZE = 35;
@@ -71,6 +71,28 @@ const PlayableCrossword = () => {
   const [userGrid, setUserGrid] = useState(
     finalGrid.map((row) => row.map((cell) => (cell ? "" : null)))
   );
+
+  // Validation function
+  const validateGrid = (setModal) => {
+    const normalizedUserGrid = userGrid.map((row) =>
+      row.map((cell) => (cell === null ? "" : cell))
+    );
+
+    const isComplete = finalGrid.every((row, rowIdx) =>
+      row.every(
+        (cellValue, colIdx) => cellValue === normalizedUserGrid[rowIdx][colIdx]
+      )
+    );
+
+    if (isComplete) {
+      setModal(true)
+    }
+  };
+
+  // Run validation on userGrid updates
+  useEffect(() => {
+    validateGrid(setModal);
+  }, [userGrid, setModal]);
 
   const handleInputChange = (rowIdx, colIdx, value) => {
     if (value.length > 1) return;
@@ -127,9 +149,9 @@ const PlayableCrossword = () => {
       wordCells.horizontal.some(
         (cell) => cell[0] === rowIdx && cell[1] === colIdx
       ) ||
-        wordCells.vertical.some(
-          (cell) => cell[0] === rowIdx && cell[1] === colIdx
-        );
+      wordCells.vertical.some(
+        (cell) => cell[0] === rowIdx && cell[1] === colIdx
+      );
 
     const focused = focusedRow === rowIdx && focusedCol === colIdx;
     const word = isInWord && !focused;
@@ -137,7 +159,7 @@ const PlayableCrossword = () => {
     return { focused, word };
   };
 
-  return (
+return (
     <CrosswordContainer
       columns={finalGrid[0].length}
       cellSize={CELL_SIZE}
