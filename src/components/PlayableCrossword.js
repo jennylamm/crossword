@@ -5,20 +5,20 @@ import { useCrossWordData } from "../context/Context";
 // Styled Components
 const CrosswordContainer = styled.div`
   display: grid;
-  grid-template-columns: ${({ columns, cellSize }) =>
-    `repeat(${columns}, ${cellSize}px)`};
+  grid-template-columns: ${({ columns, cellsize }) =>
+    `repeat(${columns}, ${cellsize}px)`};
   grid-gap: ${({ gap }) => `${gap}px`};
 `;
 
 const CellWrapper = styled.div`
   position: relative;
-  width: ${({ cellSize }) => `${cellSize}px`};
-  height: ${({ cellSize }) => `${cellSize}px`};
+  width: ${({ cellsize }) => `${cellsize}px`};
+  height: ${({ cellsize }) => `${cellsize}px`};
 `;
 
 const CellInput = styled.input`
-  width: ${({ cellSize }) => `${cellSize}px`};
-  height: ${({ cellSize }) => `${cellSize}px`};
+  width: ${({ cellsize }) => `${cellsize}px`};
+  height: ${({ cellsize }) => `${cellsize}px`};
   border: 0.5px solid #333333e6;
   text-align: center;
   font-size: 20px;
@@ -130,7 +130,6 @@ const PlayableCrossword = ({setModal}) => {
     for (let row = startRow; row <= endRow; row++) {
       wordCells.vertical.push([row, colIdx]);
     }
-
     return wordCells;
   };
 
@@ -145,16 +144,19 @@ const PlayableCrossword = ({setModal}) => {
     const { rowIdx: focusedRow, colIdx: focusedCol } = focusedCell;
     const wordCells = getWordCells(focusedRow, focusedCol);
 
-    const isInWord =
-      wordCells.horizontal.some(
-        (cell) => cell[0] === rowIdx && cell[1] === colIdx
-      ) ||
-      wordCells.vertical.some(
-        (cell) => cell[0] === rowIdx && cell[1] === colIdx
-      );
+    const isWordHorizontal =  wordCells.horizontal.length > 1
+    const isWordVertical = wordCells.vertical.length > 1
+
+    const isWordBoth = isWordHorizontal && isWordVertical
+
+    const hortizontalCells = wordCells.horizontal.some((cell) => cell[0] === rowIdx && cell[1] === colIdx)
+    const verticalCells = wordCells.vertical.some((cell) => cell[0] === rowIdx && cell[1] === colIdx)
+
+    const isInWord = isWordBoth ? hortizontalCells : hortizontalCells || verticalCells
 
     const focused = focusedRow === rowIdx && focusedCol === colIdx;
     const word = isInWord && !focused;
+
 
     return { focused, word };
   };
@@ -162,7 +164,7 @@ const PlayableCrossword = ({setModal}) => {
 return (
     <CrosswordContainer
       columns={finalGrid[0].length}
-      cellSize={CELL_SIZE}
+      cellsize={CELL_SIZE}
       gap={GAP}
     >
       {finalGrid.map((row, rowIdx) =>
@@ -172,7 +174,7 @@ return (
           const { focused, word } = getHighlightColors(rowIdx, colIdx);
 
           return (
-            <CellWrapper key={`${rowIdx}-${colIdx}`} cellSize={CELL_SIZE}>
+            <CellWrapper key={`${rowIdx}-${colIdx}`} cellsize={CELL_SIZE}>
               <CellInput
                 type="text"
                 value={userGrid[rowIdx][colIdx] || ""}
@@ -185,7 +187,7 @@ return (
                 focused={focused} // Pass focused prop
                 word={word} // Pass word prop
                 cell={cell} // Pass cell prop to manage default background
-                cellSize={CELL_SIZE}
+                cellsize={CELL_SIZE}
                 onFocus={() => handleCellFocus(rowIdx, colIdx)}
               />
               {cellNumber && <ClueNumber>{cellNumber}</ClueNumber>}

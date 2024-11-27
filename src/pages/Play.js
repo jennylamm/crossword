@@ -22,21 +22,24 @@ const PositionAll = styled.div`
 const PositionBoth = styled.div`
   padding-left: 10%;
   padding-top: 5%;
-  margin: 30px;
+  margin: 30px 0 20px 30px ;
 `;
 
 const PositionInput = styled.div`
   display: flex;
-  align-items: center;
+  align-items: left;
   justify-content: center;
   flex-direction: column;
+  margin-top: 10px;
+  width: 1000px
+
 `;
 
 const PositionPlayCrossWord = styled.div`
   flex-direction: column;
   align-items: center;
   display: grid;
-  grid-template-columns: 5fr 3fr;
+  grid-template-columns: 2fr 1fr;
 
 `
 
@@ -67,10 +70,11 @@ const Play = () => {
       <PositionBoth>
         <h1 style={{ marginBottom: "10px" }}>Play Crossword</h1>
         <p style={{ margin: "0px" }}>Use clues if you're stuck!</p>
-      </PositionBoth>
       <PositionInput>
-        {playPinSubmitted ? <PlayCrossWord /> : <PlayInput />}
+        {playPinSubmitted ? <PlayCrossWord setModal={setShowCompletedModal}/> : <PlayInput />}
       </PositionInput>
+      </PositionBoth>
+
     </PositionAll>
   );
 };
