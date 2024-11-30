@@ -44,7 +44,7 @@ const ClueNumber = styled.span`
   color: rgb(62, 21, 21);
 `;
 
-const PlayableCrossword = ({setModal}) => {
+const PlayableCrossword = ({ setModal }) => {
   const { finalGrid, verticalClues, horizontalClues } = useCrossWordData();
 
   const CELL_SIZE = 35;
@@ -67,6 +67,7 @@ const PlayableCrossword = ({setModal}) => {
 
   // Track the current focus position
   const [focusedCell, setFocusedCell] = useState(null);
+  const [highlightDirection, setHighlightDirection] = useState({});
 
   const [userGrid, setUserGrid] = useState(
     finalGrid.map((row) => row.map((cell) => (cell ? "" : null)))
@@ -85,7 +86,7 @@ const PlayableCrossword = ({setModal}) => {
     );
 
     if (isComplete) {
-      setModal(true)
+      setModal(true);
     }
   };
 
@@ -96,11 +97,11 @@ const PlayableCrossword = ({setModal}) => {
 
   const handleInputChange = (rowIdx, colIdx, value) => {
     if (value.length > 1) return;
-    const updatedGrid = userGrid.map((row, rIdx) =>
-      row.map((cellValue, cIdx) =>
-        rIdx === rowIdx && cIdx === colIdx ? value.toUpperCase() : cellValue
-      )
-    );
+   const updatedGrid = userGrid.map((row, rIdx) =>
+    row.map((cellValue, cIdx) =>
+      rIdx === rowIdx && cIdx === colIdx ? value.toUpperCase() : cellValue
+    )
+  );
     setUserGrid(updatedGrid);
   };
 
@@ -133,9 +134,23 @@ const PlayableCrossword = ({setModal}) => {
     return wordCells;
   };
 
-  // When a cell is focused, determine the word it belongs to and highlight accordingly
-  const handleCellFocus = (rowIdx, colIdx) => {
-    setFocusedCell({ rowIdx, colIdx });
+  const handleCellClick = (rowIdx, colIdx) => {
+    const key = `${rowIdx}-${colIdx}`;
+
+    // If the cell is already focused, toggle the highlight direction
+    if (
+      focusedCell &&
+      focusedCell.rowIdx === rowIdx &&
+      focusedCell.colIdx === colIdx
+    ) {
+      setHighlightDirection((prev) => ({
+        ...prev,
+        [key]: prev[key] === "horizontal" ? "vertical" : "horizontal",
+      }));
+    } else {
+      // Otherwise, set the cell as focused
+      setFocusedCell({ rowIdx, colIdx });
+    }
   };
 
   const getHighlightColors = (rowIdx, colIdx) => {
@@ -144,24 +159,36 @@ const PlayableCrossword = ({setModal}) => {
     const { rowIdx: focusedRow, colIdx: focusedCol } = focusedCell;
     const wordCells = getWordCells(focusedRow, focusedCol);
 
-    const isWordHorizontal =  wordCells.horizontal.length > 1
-    const isWordVertical = wordCells.vertical.length > 1
+    const key = `${focusedRow}-${focusedCol}`;
 
-    const isWordBoth = isWordHorizontal && isWordVertical
+    const isWordBoth =
+      wordCells.horizontal.length > 1 && wordCells.vertical.length > 1;
 
-    const hortizontalCells = wordCells.horizontal.some((cell) => cell[0] === rowIdx && cell[1] === colIdx)
-    const verticalCells = wordCells.vertical.some((cell) => cell[0] === rowIdx && cell[1] === colIdx)
+    const direction = isWordBoth
+      ? highlightDirection[key] || "horizontal"
+      : null;
 
-    const isInWord = isWordBoth ? hortizontalCells : hortizontalCells || verticalCells
+    const hortizontalCells = wordCells.horizontal.some(
+      (cell) => cell[0] === rowIdx && cell[1] === colIdx
+    );
+    const verticalCells = wordCells.vertical.some(
+      (cell) => cell[0] === rowIdx && cell[1] === colIdx
+    );
+
+    const isInWord =
+      isWordBoth && direction === "horizontal"
+        ? hortizontalCells
+        : isWordBoth && direction === "vertical"
+        ? verticalCells
+        : hortizontalCells || verticalCells;
 
     const focused = focusedRow === rowIdx && focusedCol === colIdx;
     const word = isInWord && !focused;
 
-
     return { focused, word };
   };
 
-return (
+  return (
     <CrosswordContainer
       columns={finalGrid[0].length}
       cellsize={CELL_SIZE}
@@ -178,17 +205,17 @@ return (
               <CellInput
                 type="text"
                 value={userGrid[rowIdx][colIdx] || ""}
-                onChange={(e) =>
+                onInput={(e) =>
                   handleInputChange(rowIdx, colIdx, e.target.value)
                 }
-                maxLength={1}
+                maxLength={1} // Ensures only one character can be entered
                 disabled={!cell}
                 active={!!cell}
                 focused={focused} // Pass focused prop
                 word={word} // Pass word prop
                 cell={cell} // Pass cell prop to manage default background
                 cellsize={CELL_SIZE}
-                onFocus={() => handleCellFocus(rowIdx, colIdx)}
+                onClick={() => handleCellClick(rowIdx, colIdx)} // Single click handler
               />
               {cellNumber && <ClueNumber>{cellNumber}</ClueNumber>}
             </CellWrapper>
