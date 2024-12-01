@@ -96,13 +96,65 @@ const PlayableCrossword = ({ setModal }) => {
   }, [userGrid, setModal]);
 
   const handleInputChange = (rowIdx, colIdx, value) => {
-    if (value.length > 1) return;
-   const updatedGrid = userGrid.map((row, rIdx) =>
-    row.map((cellValue, cIdx) =>
-      rIdx === rowIdx && cIdx === colIdx ? value.toUpperCase() : cellValue
-    )
-  );
+    //if (value.length > 1) return;
+
+    const isBackspace = value === ''
+    const updatedGrid = userGrid.map((row, rIdx) =>
+      row.map((cellValue, cIdx) =>
+        rIdx === rowIdx && cIdx === colIdx ? value.toUpperCase() : cellValue
+      )
+    );
     setUserGrid(updatedGrid);
+
+    const wordCells = getWordCells(rowIdx, colIdx);
+    const key = `${rowIdx}-${colIdx}`;
+
+    console.log(highlightDirection[key])
+    const isHorizontal = highlightDirection[key] === "horizontal";
+    const directionCells = isHorizontal
+      ? wordCells.horizontal
+      : wordCells.vertical;
+
+    const currentIndex = directionCells.findIndex(
+      ([row, col]) => row === rowIdx && col === colIdx
+    );
+
+    console.log('horizontal?', isHorizontal, directionCells, currentIndex)
+
+    let nextCell = null;
+    if (isBackspace && currentIndex > 0) {
+      // Move to the previous cell
+      nextCell = directionCells[currentIndex - 1];
+      console.log('backspace', nextCell)
+    } else if (!isBackspace && currentIndex < directionCells.length - 1) {
+      // Move to the next cell
+      nextCell = directionCells[currentIndex + 1];
+      console.log('not backspace', nextCell)
+
+    }
+
+    if (nextCell) {
+      const [nextRow, nextCol] = nextCell;
+      setFocusedCell({ rowIdx: nextRow, colIdx: nextCol }); // Update the focused cell
+      const nextInput = document.getElementById(`cell-${nextRow}-${nextCol}`);
+      nextInput?.focus();
+
+      const nextKey = `${nextRow}-${nextCol}`;
+      const wordCells = getWordCells(nextRow, nextCol);
+
+      const isWordHorizontal = wordCells.horizontal.length > 1;
+      const isWordVertical = wordCells.vertical.length > 1;
+      const isWordBoth = isWordHorizontal && isWordVertical;
+
+
+      setHighlightDirection((prev) => ({
+        ...prev,
+        [nextKey]:
+          prev[nextKey] || isWordBoth || isWordHorizontal
+            ? "horizontal"
+            : "vertical",
+      }));
+    }
   };
 
   // Get the word cells (horizontal and vertical) for the focused cell
@@ -136,6 +188,11 @@ const PlayableCrossword = ({ setModal }) => {
 
   const handleCellClick = (rowIdx, colIdx) => {
     const key = `${rowIdx}-${colIdx}`;
+    const wordCells = getWordCells(rowIdx, colIdx);
+
+    const isWordHorizontal = wordCells.horizontal.length > 1;
+    const isWordVertical = wordCells.vertical.length > 1;
+    const isWordBoth = isWordHorizontal && isWordVertical;
 
     // If the cell is already focused, toggle the highlight direction
     if (
@@ -143,13 +200,23 @@ const PlayableCrossword = ({ setModal }) => {
       focusedCell.rowIdx === rowIdx &&
       focusedCell.colIdx === colIdx
     ) {
-      setHighlightDirection((prev) => ({
-        ...prev,
-        [key]: prev[key] === "horizontal" ? "vertical" : "horizontal",
-      }));
+      if (isWordBoth) {
+        setHighlightDirection((prev) => ({
+          ...prev,
+          [key]: prev[key] === "horizontal" ? "vertical" : "horizontal",
+        }));
+      }
     } else {
       // Otherwise, set the cell as focused
       setFocusedCell({ rowIdx, colIdx });
+
+      setHighlightDirection((prev) => ({
+        ...prev,
+        [key]:
+          prev[key] || isWordBoth || isWordHorizontal
+            ? "horizontal"
+            : "vertical",
+      }));
     }
   };
 
@@ -203,6 +270,7 @@ const PlayableCrossword = ({ setModal }) => {
           return (
             <CellWrapper key={`${rowIdx}-${colIdx}`} cellsize={CELL_SIZE}>
               <CellInput
+                id={`cell-${rowIdx}-${colIdx}`} // Add unique id for targeting
                 type="text"
                 value={userGrid[rowIdx][colIdx] || ""}
                 onInput={(e) =>
