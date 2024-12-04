@@ -30,7 +30,7 @@ const PositionGrid = styled.div`
 `;
 
 export const DisplayClues = styled.div`
-  margin: 10px;
+  margin-left: 75px;
   white-space: nowrap;
 `;
 

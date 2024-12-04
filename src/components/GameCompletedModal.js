@@ -55,10 +55,9 @@ const GameCompletedModal = (props) => {
             width: "250px",
           }}
         >
-          Happy 2 Years Husband Raj. To all the memories and silly sayings we've
-          collected in this year. I love you forever.
+          Happy 2 Years!! To all the memories and silly sayings we've
+          collected over the year. <br></br> I love you Raj, forever.
         </p>
-
         <button onClick={props.onHide}>Close</button>
       </PositionText>
     </StyledModal>

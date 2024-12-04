@@ -96,7 +96,7 @@ const PlayableCrossword = ({ setModal }) => {
   }, [userGrid, setModal]);
 
   const handleInputChange = (rowIdx, colIdx, value) => {
-    //if (value.length > 1) return;
+    if (value.length > 1) return;
 
     const isBackspace = value === ''
     const updatedGrid = userGrid.map((row, rIdx) =>
@@ -129,11 +129,13 @@ const PlayableCrossword = ({ setModal }) => {
     } else if (!isBackspace && currentIndex < directionCells.length - 1) {
       // Move to the next cell
       nextCell = directionCells[currentIndex + 1];
-      console.log('not backspace', nextCell)
+      console.log('not backspace', nextCell, currentIndex, directionCells)
 
     }
 
-    if (nextCell) {
+    console.log(nextCell, nextCell !== null)
+
+    if (nextCell !== null) {
       const [nextRow, nextCol] = nextCell;
       setFocusedCell({ rowIdx: nextRow, colIdx: nextCol }); // Update the focused cell
       const nextInput = document.getElementById(`cell-${nextRow}-${nextCol}`);
@@ -149,10 +151,8 @@ const PlayableCrossword = ({ setModal }) => {
 
       setHighlightDirection((prev) => ({
         ...prev,
-        [nextKey]:
-          prev[nextKey] || isWordBoth || isWordHorizontal
-            ? "horizontal"
-            : "vertical",
+        [nextKey]: highlightDirection[key]
+
       }));
     }
   };
