@@ -69,7 +69,6 @@ const Play = () => {
       />
       <PositionBoth>
         <h1 style={{ marginBottom: "10px" }}>Play Crossword</h1>
-        <p style={{ margin: "0px" }}>Use clues if you're stuck!</p>
       <PositionInput>
         {playPinSubmitted ? <PlayCrossWord setModal={setShowCompletedModal}/> : <PlayInput />}
       </PositionInput>
