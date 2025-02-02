@@ -55,7 +55,8 @@ const GameCompletedModal = (props) => {
             width: "250px",
           }}
         >
-          You did it
+          Happy 2 Years!! To all the memories and silly sayings we've
+          collected over the year. <br></br> I love you Raj, forever.
         </p>
         <button onClick={props.onHide}>Close</button>
       </PositionText>
